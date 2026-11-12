@@ -2,7 +2,7 @@
 # Verify every tab against Claude Code's own account of its sessions.
 #
 # Claude Code maintains ~/.claude/sessions/<pid>.json for each live CLI
-# session: a status of busy | waiting | idle, and the tmux pane the session
+# session: a status of busy | waiting | idle | shell, and the tmux pane the session
 # runs in. That file keeps moving through the windows where no hook event
 # exists — stop-hook chains, post-Stop continuations, subagents working under
 # a finished turn, an Esc that fired nothing — so it is the authority the
@@ -122,7 +122,9 @@ for f in "$SESSIONS_DIR"/*.json; do
                 TMUX_PANE="$pane" claude_set_state "permission"
             fi
             ;;
-        idle)
+        # shell: the turn is over and a background shell it started is still
+        # running ("1 shell still running") — the chat awaits you, as with idle.
+        idle|shell)
             # The session stopped without the tab hearing it end — an Esc, or
             # a Stop that never reached this pane. It awaits you either way.
             case "$state" in

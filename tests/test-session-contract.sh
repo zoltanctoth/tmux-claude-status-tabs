@@ -18,8 +18,8 @@ for f in "$DIR"/*.json; do
 
     status=$(jq -r '.status // empty' "$f")
     case "$status" in
-        busy|waiting|idle) echo "ok   $(basename "$f"): status '$status' is a known value" ;;
-        *) echo "FAIL $(basename "$f"): status '$status' not in busy|waiting|idle" ;;
+        busy|waiting|idle|shell) echo "ok   $(basename "$f"): status '$status' is a known value" ;;
+        *) echo "FAIL $(basename "$f"): status '$status' not in busy|waiting|idle|shell" ;;
     esac
 
     updated=$(jq -r '.statusUpdatedAt // empty' "$f")
