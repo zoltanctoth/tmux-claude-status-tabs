@@ -40,8 +40,10 @@ done
 
 # Shared state helpers — every hook sources this from its own directory.
 mkdir -p "$HOOKS_DEST/lib"
-cp "$SCRIPT_DIR/hooks/lib/state.sh" "$HOOKS_DEST/lib/state.sh"
-ok "Installed $HOOKS_DEST/lib/state.sh"
+for lib in state.sh session-map.sh; do
+    cp "$SCRIPT_DIR/hooks/lib/$lib" "$HOOKS_DEST/lib/$lib"
+    ok "Installed $HOOKS_DEST/lib/$lib"
+done
 
 # Seeder and reconciler — not wired to an event; run from tmux at startup or by hand.
 for tool in seed-panes.sh link-pane.sh capture-payloads.sh reconcile-panes.sh; do
