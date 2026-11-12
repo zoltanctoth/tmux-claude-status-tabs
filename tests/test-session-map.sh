@@ -23,3 +23,25 @@ kill "$pid" 2>/dev/null
 pid=$(start)
 check "no arguments, no claim" "$(claude_session_of_pane "$pid")" ""
 kill "$pid" 2>/dev/null
+
+# A bare `claude` hosted by the daemon states nothing on its command line; its
+# session file — named after its pid, written by Claude — names the session
+# and the pane it runs in.
+export CLAUDE_SESSIONS_DIR="$WORK/sessions"; mkdir -p "$CLAUDE_SESSIONS_DIR"
+test_server_start
+PANE=$(t display-message -p '#{pane_id}')
+DSID=44444444-4444-4444-4444-444444444444
+
+pid=$(start)
+printf '{"pid":%s,"sessionId":"%s","tmux":"t:@0.%s","status":"idle"}' "$pid" "$DSID" "$PANE" \
+    > "$CLAUDE_SESSIONS_DIR/$pid.json"
+check "a session file names the pane's session" "$(claude_session_of_pane "$pid")" "$DSID"
+check "an unstamped session is found through its file" "$(claude_pane_of_session "$DSID")" "$PANE"
+check "and the pane is stamped for next time" "$(t show-options -pqv -t "$PANE" @claude-session)" "$DSID"
+kill "$pid" 2>/dev/null; wait "$pid" 2>/dev/null
+
+GONE=55555555-5555-5555-5555-555555555555
+printf '{"pid":%s,"sessionId":"%s","tmux":"t:@0.%s","status":"idle"}' 999999 "$GONE" "$PANE" \
+    > "$CLAUDE_SESSIONS_DIR/999999.json"
+check "a leftover file of a dead process names nothing" "$(claude_pane_of_session "$GONE")" ""
+test_server_stop

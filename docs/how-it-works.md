@@ -40,7 +40,7 @@ That leaves two gaps hooks cannot fill, both answered from the process table rat
 
 `hooks/link-pane.sh <session-id>` binds a pane to a conversation by hand, for the case below; `--guess` lists the conversations of that pane's project, `--clear` undoes it. Anything that conversation forks is then followed to the same tab.
 
-One case cannot be linked from outside. A conversation started with no arguments can end up hosted inside Claude's daemon, with the pane holding only a client attached to it; the session id then appears in no process argument, environment or open file that a pane can be matched against. `seed-panes.sh` names those panes as `unlinked` — their tab still shows that a session is present, but it cannot follow what that session is doing. Starting the conversation in the pane (as `claude --resume <id>` does) is what makes its hooks carry the pane.
+A conversation started with no arguments can end up hosted inside Claude's daemon, with the pane holding only a client attached to it; the session id then appears in no process argument, environment or open file of the pane. The client does keep `~/.claude/sessions/<pid>.json` — named after its own pid, carrying the current `sessionId` and the pane (`"tmux": "<session>:@<window>.%<pane>"`) — so a hook that arrives without a pane looks its session id up there, stamps the pane, and paints it; the seeder stamps from the same file. That follows `/clear` and `--resume` too, which give the same pane a new id. Only when that file names no pane does `seed-panes.sh` report the pane as `unlinked`; `link-pane.sh` binds it by hand.
 
 ## The verifier
 
