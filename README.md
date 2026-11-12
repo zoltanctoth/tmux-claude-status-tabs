@@ -60,7 +60,7 @@ Built in via `osascript` — nothing extra to install. With [`alerter`](https://
 
 - **Colors:** edit `tmux/claude-state.conf`, swap `cyan`/`yellow`/`red`/`green` for your theme's values.
 - **Spinner:** edit the `frames=(⬢ ⬡)` array in `hooks/lib/state.sh`.
-- **No notifications:** set `CAN_NOTIFY="0"` in `hooks/notify.sh`.
+- **No notifications:** set `CLAUDE_TABS_NOTIFY=0` in the hooks' environment, e.g. `"env": {"CLAUDE_TABS_NOTIFY": "0"}` in `~/.claude/settings.json` (useful on a machine you work on over SSH, where they would pop up on its own screen).
 
 More — pane seeding, debugging, tests, the demo GIF — in [docs/how-it-works.md](docs/how-it-works.md).
 

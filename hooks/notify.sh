@@ -58,9 +58,11 @@ preview() {
     printf '%s' "${sentence:-$(printf '%s' "$cleaned" | cut -c1-80)}"
 }
 
-# macOS notifications (no-op on other platforms)
+# macOS notifications (no-op on other platforms). CLAUDE_TABS_NOTIFY=0 turns
+# them off without editing this file — e.g. via "env" in settings.json on a
+# machine you reach over SSH, where they would pop up on the wrong screen.
 CAN_NOTIFY="0"
-if [ "$(uname)" = "Darwin" ] && command -v osascript >/dev/null 2>&1; then
+if [ "${CLAUDE_TABS_NOTIFY:-1}" != "0" ] && [ "$(uname)" = "Darwin" ] && command -v osascript >/dev/null 2>&1; then
     CAN_NOTIFY="1"
 fi
 
