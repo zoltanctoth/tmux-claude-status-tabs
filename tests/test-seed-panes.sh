@@ -15,7 +15,7 @@ if [ -z "$A" ] || [ -z "$B" ]; then echo "FAIL harness: no test panes"; exit 1; 
 
 APID=$(t display-message -p -t "$A" '#{pane_pid}')
 BPID=$(t display-message -p -t "$B" '#{pane_pid}')
-TABLE=$(mktemp); trap 'rm -f "$TABLE"; t kill-session -t seedtest 2>/dev/null' EXIT
+TABLE=$(mktemp); trap 'rm -f "$TABLE"; t kill-session -t seedtest 2>/dev/null; test_server_stop' EXIT
 
 # A holds a session, B is a plain shell.
 withsession() { printf '%s 1 /bin/zsh\n%s %s /Users/u/.local/bin/claude\n%s 1 /bin/zsh\n' \

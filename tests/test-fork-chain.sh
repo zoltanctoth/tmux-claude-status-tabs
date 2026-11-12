@@ -13,7 +13,7 @@ CHILD=bbbbbbbb-2222-2222-2222-222222222222
 GRAND=cccccccc-3333-3333-3333-333333333333
 PROJ=/Users/x/.claude/projects/-Users-x-repo
 
-TABLE=$(mktemp); trap 'rm -f "$TABLE"' EXIT
+TABLE=$(mktemp); trap 'rm -f "$TABLE"; test_server_stop' EXIT
 cat > "$TABLE" <<PS
 /path/claude --session-id $CHILD --fork-session --resume $PROJ/$PARENT.jsonl
 /path/claude --session-id $GRAND --fork-session --resume $PROJ/$CHILD.jsonl

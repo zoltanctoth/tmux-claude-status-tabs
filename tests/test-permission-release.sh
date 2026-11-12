@@ -6,7 +6,7 @@ source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 test_server_start
 trap test_server_stop EXIT
 
-TABLE=$(mktemp); trap 'rm -f "$TABLE"' EXIT
+TABLE=$(mktemp); trap 'rm -f "$TABLE"; test_server_stop' EXIT
 
 # 100 pane shell -> 101 claude ; waiting on the dialog, nothing running yet
 printf '100 1 -zsh\n101 100 /Users/u/.local/bin/claude\n102 101 caffeinate\n' > "$TABLE"
