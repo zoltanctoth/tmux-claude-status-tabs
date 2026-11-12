@@ -34,7 +34,9 @@ claude_mark_activity "session-start" ""
 claude_clear_ask
 claude_clear_settled
 claude_set_state "input"
-tmux set-option -w -t "$TMUX_PANE" @claude-spinner "⬢" 2>/dev/null
+first_frame=$(tmux show-options -gqv @claude-spinner-frames 2>/dev/null)
+first_frame=${first_frame%% *}
+tmux set-option -w -t "$TMUX_PANE" @claude-spinner "${first_frame:-⬢}" 2>/dev/null
 # A server with no attached client answers "no current client" on stderr and
 # exits non-zero. Claude reports a hook that exits non-zero, so the last word
 # here has to be a success either way.

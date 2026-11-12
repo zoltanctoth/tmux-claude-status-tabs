@@ -277,7 +277,12 @@ claude_start_spinner() {
         # SIGKILL — so the signal traps exit, which fires the EXIT trap in turn.
         trap 'rm -rf "$lock" 2>/dev/null' EXIT
         trap 'exit 0' INT TERM HUP
-        local frames=("⬢" "⬡") i=0 n state lines
+        # Frames come from the global tmux option @claude-spinner-frames
+        # (space-separated) when it is set, so a theme can pick glyphs its font
+        # actually has without editing this file.
+        local frames=() i=0 n state lines
+        read -r -a frames <<< "$(tmux show-options -gqv @claude-spinner-frames 2>/dev/null)"
+        [ ${#frames[@]} -gt 0 ] || frames=("⬢" "⬡")
         # Backstop of 4 hours in case the state ever wedges on "running". The
         # old 30-minute cap was shorter than real agent runs, so the loop kept
         # quitting under a live session and froze the tab on a half-lit glyph.
@@ -305,7 +310,7 @@ claude_start_spinner() {
                     baseline="$lines"
                 fi
             fi
-            i=$(( 1 - i ))
+            i=$(( (i + 1) % ${#frames[@]} ))
             tmux set-option -w -t "$pane" @claude-spinner "${frames[$i]}" 2>/dev/null
             tmux refresh-client -S 2>/dev/null
         done

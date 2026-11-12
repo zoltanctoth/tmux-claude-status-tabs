@@ -59,7 +59,7 @@ Built in via `osascript` — nothing extra to install. With [`alerter`](https://
 ## Customization
 
 - **Colors:** edit `tmux/claude-state.conf`, swap `cyan`/`yellow`/`red`/`green` for your theme's values.
-- **Spinner:** edit the `frames=(⬢ ⬡)` array in `hooks/lib/state.sh`.
+- **Spinner:** `set -g @claude-spinner-frames "● ○"` in `~/.tmux.conf` (space-separated, any number of frames; default `⬢ ⬡`). Pick glyphs your terminal font has: a missing one is drawn from a fallback font and can come out oversized.
 - **No notifications:** set `CLAUDE_TABS_NOTIFY=0` in the hooks' environment, e.g. `"env": {"CLAUDE_TABS_NOTIFY": "0"}` in `~/.claude/settings.json` (useful on a machine you work on over SSH, where they would pop up on its own screen).
 
 More — pane seeding, debugging, tests, the demo GIF — in [docs/how-it-works.md](docs/how-it-works.md).
