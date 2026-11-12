@@ -88,7 +88,9 @@ esac
 # too when it is there, so a hand-edited tab bar cannot silently stop drawing.
 if [ -f "$HOME/.tmux.conf" ] && grep -q '@claude-state' "$HOME/.tmux.conf"; then
     echo "-- ~/.tmux.conf --"
-    live=$(mktemp); grep -E '^setw -g window-status(-current)?-format' "$HOME/.tmux.conf" > "$live"
+    # The formats may reach the state through a user option (#{E:@claude-badge}),
+    # so @claude-* option definitions come along with them.
+    live=$(mktemp); grep -E '^(setw -g window-status(-current)?-format|set -g @claude-)' "$HOME/.tmux.conf" > "$live"
     t source-file "$live"
     rm -f "$live"
     t set-option -w -t "$W" @park ""
